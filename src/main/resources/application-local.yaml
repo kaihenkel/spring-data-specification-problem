@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  datasource:
+    username: admin
+    password: admin
+    url: 'jdbc:postgresql://localhost:15432/postgres'
