@@ -4,6 +4,7 @@ import com.example.demo.domain.entity.*;
 import com.example.demo.domain.repository.TopLevelRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -60,30 +61,56 @@ class TopLevelServiceTest {
         return sub;
     }
 
+    @Nested
+    class SeparateSpecifications {
+        @Test
+        void testListAll() {
+            List<TopLevelEntity> actual = service.list(null, null);
+            assertEquals(2, actual.size());
+        }
 
-    @Test
-    void testListAll() {
-        List<TopLevelEntity> actual = service.list(null, null);
-        assertEquals(2, actual.size());
+        @Test
+        void testListActive() {
+            List<TopLevelEntity> actual = service.list(true, null);
+            assertEquals(1, actual.size());
+        }
+
+        @Test
+        void testListDisabled() {
+            List<TopLevelEntity> actual = service.list(null, List.of(Status.DISABLED));
+            assertEquals(1, actual.size());
+        }
+
+        @Test
+        void testListActiveDisabled() {
+            List<TopLevelEntity> actual = service.list(true, List.of(Status.DISABLED));
+            assertEquals(0, actual.size());
+        }
     }
+    @Nested
+    class OneSpecification {
+        @Test
+        void testListAll() {
+            List<TopLevelEntity> actual = service.listFilterOne(null, null);
+            assertEquals(2, actual.size());
+        }
 
-    @Test
-    void testListActive() {
-        List<TopLevelEntity> actual = service.list(true, null);
-        assertEquals(1, actual.size());
+        @Test
+        void testListActive() {
+            List<TopLevelEntity> actual = service.listFilterOne(true, null);
+            assertEquals(1, actual.size());
+        }
+
+        @Test
+        void testListDisabled() {
+            List<TopLevelEntity> actual = service.listFilterOne(null, List.of(Status.DISABLED));
+            assertEquals(1, actual.size());
+        }
+
+        @Test
+        void testListActiveDisabled() {
+            List<TopLevelEntity> actual = service.listFilterOne(true, List.of(Status.DISABLED));
+            assertEquals(0, actual.size());
+        }
     }
-
-    @Test
-    void testListDisabled() {
-        List<TopLevelEntity> actual = service.list(null, List.of(Status.DISABLED));
-        assertEquals(1, actual.size() );
-    }
-
-    @Test
-    void testListActiveDisabled() {
-        List<TopLevelEntity> actual = service.list(true, List.of(Status.DISABLED));
-        assertEquals(0, actual.size());
-    }
-
-
 }

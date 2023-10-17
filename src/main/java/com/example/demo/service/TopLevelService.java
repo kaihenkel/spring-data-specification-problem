@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.domain.specification.TopLevelSpecifications.byFirstActive;
-import static com.example.demo.domain.specification.TopLevelSpecifications.bySecondStatus;
+import static com.example.demo.domain.specification.TopLevelSpecifications.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +18,11 @@ public class TopLevelService {
 
     public List<TopLevelEntity> list(Boolean active, List<Status> statuses) {
         Specification<TopLevelEntity> filter = byFirstActive(active).and(bySecondStatus(statuses));
+        return repository.findAll(filter);
+    }
+
+    public List<TopLevelEntity> listFilterOne(Boolean active, List<Status> statuses) {
+        Specification<TopLevelEntity> filter = byFirstActiveAndSecondStatus(active, statuses);
         return repository.findAll(filter);
     }
 
