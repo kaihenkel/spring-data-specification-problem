@@ -37,8 +37,8 @@ class TopLevelServiceTest {
                     TopLevelEntity a = repository.save(new TopLevelEntity("a"));
                     sub(a,"a-1", true, Status.ACTIVE, Status.PENDING);
 
-                    TopLevelEntity b = repository.save(new TopLevelEntity("a"));
-                    sub(a,"b-1", false, Status.PENDING, Status.DISABLED);
+                    TopLevelEntity b = repository.save(new TopLevelEntity("b"));
+                    sub(b,"b-1", false, Status.PENDING, Status.DISABLED);
                 }
             }
         );
@@ -88,7 +88,7 @@ class TopLevelServiceTest {
         }
     }
     @Nested
-    class OneSpecification {
+    class OneSpecificationMethod {
         @Test
         void testListAll() {
             List<TopLevelEntity> actual = service.listFilterOne(null, null);
@@ -113,4 +113,32 @@ class TopLevelServiceTest {
             assertEquals(0, actual.size());
         }
     }
+
+    @Nested
+    class CustomSpecification {
+        @Test
+        void testListAll() {
+            List<TopLevelEntity> actual = service.listByCustomSpecification(null, null);
+            assertEquals(2, actual.size());
+        }
+
+        @Test
+        void testListActive() {
+            List<TopLevelEntity> actual = service.listByCustomSpecification(true, null);
+            assertEquals(1, actual.size());
+        }
+
+        @Test
+        void testListDisabled() {
+            List<TopLevelEntity> actual = service.listByCustomSpecification(null, List.of(Status.DISABLED));
+            assertEquals(1, actual.size());
+        }
+
+        @Test
+        void testListActiveDisabled() {
+            List<TopLevelEntity> actual = service.listByCustomSpecification(true, List.of(Status.DISABLED));
+            assertEquals(0, actual.size());
+        }
+    }
+
 }

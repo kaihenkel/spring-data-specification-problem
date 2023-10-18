@@ -3,13 +3,14 @@ package com.example.demo.service;
 import com.example.demo.domain.entity.Status;
 import com.example.demo.domain.entity.TopLevelEntity;
 import com.example.demo.domain.repository.TopLevelRepository;
+import com.example.demo.domain.specification.TopSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.demo.domain.specification.TopLevelSpecifications.*;
+import static com.example.demo.domain.specification.Specifications.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,10 @@ public class TopLevelService {
     public List<TopLevelEntity> listFilterOne(Boolean active, List<Status> statuses) {
         Specification<TopLevelEntity> filter = byFirstActiveAndSecondStatus(active, statuses);
         return repository.findAll(filter);
+    }
+
+    public List<TopLevelEntity> listByCustomSpecification(Boolean active, List<Status> statuses) {
+        return repository.findAll(new TopSpecification(active, statuses));
     }
 
 }

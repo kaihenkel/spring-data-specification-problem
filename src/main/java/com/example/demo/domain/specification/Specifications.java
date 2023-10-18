@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.NONE)
-public class TopLevelSpecifications {
+public class Specifications {
     public static Specification<TopLevelEntity> byFirstActive(Boolean active) {
         if (active == null) {
             return (root, query, criteriaBuilder) -> null;
